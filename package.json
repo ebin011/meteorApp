@@ -1,0 +1,20 @@
+{
+  "name": "meteorApp",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.20.0",
+    "lodash": "^4.14.0",
+    "material-ui": "^0.18.2",
+    "meteor-node-stubs": "~0.2.4",
+    "moment": "^2.14.1",
+    "react": "^15.5.4",
+    "react-addons-pure-render-mixin": "^15.5.2",
+    "react-addons-update": "^15.5.2",
+    "react-dom": "^15.5.4",
+    "react-router": "^2.6.1",
+    "react-tap-event-plugin": "^2.0.1"
+  }
+}
