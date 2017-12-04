@@ -43,12 +43,13 @@ class TaskPage extends React.Component {
    return ib;
  }
  handleMessageChange(event) {
- this.setState({message:event.target.value})
-
+   console.log(event.target.value);
+ this.setState({message:event.target.value,flag:true})
  this.handleChangeAndValidate("message", event.target.value);
   }
 
   handleChangeAndValidate(name, value) {
+    console.log(name,value);
     if (typeof value == "string") {
       value = value.trim();
       if (value == "") {
@@ -56,6 +57,7 @@ class TaskPage extends React.Component {
       }
     }
     let ib = this.state.newTask;
+
     const options = {};
     ib[name] = value;
     options.stopOnFirstError = true;
@@ -93,9 +95,24 @@ removeMessage.call({message: data}, (err, res) => {
       }, 4000);
     });
  }
- handleMessagePost(event){
+ handleMessagePost(){
    this.setState({flag:true})
-    {this.saveMessage()}
+   const message = this.state.newTask;
+   console.log(message);
+  //{this.saveMessage()}
+  saveMessage.call({message}, (err, res) => {
+
+        if (err) {
+          console.log("Error ",err);
+
+        } else {
+         console.log("events saved successfully.");
+        };
+        setTimeout(() => {
+          console.log("Time Out");
+        }, 4000);
+      });
+
  }
  saveMessage(){
    const message = this.state.newTask;
@@ -115,37 +132,57 @@ removeMessage.call({message: data}, (err, res) => {
  }
   render() {
  const {messages} = this.props;
+ const {flag} = this.state;
+ const len = messages.length;
+ console.log(flag,this.state.message,messages.length);
+ // {/*{messages.map((message) => (
+ //   <Card >
+ //   <h4   style={{width:'90%'}} >{message}</h4>
+ //   <FloatingActionButton mini={true}
+ //              onTouchTap={(event) => this.removeMessageFromDB(event, message)}>
+ //               <Close />
+ //  </FloatingActionButton>
+ //   </Card>
+ // ))}*/}
 
-   messages.map(message => (console.log(message)))
+   messages.map(message => (console.log(message.message)))
     return (
-      <div>
-      {this.state.flag?
+      <div >
+      {flag?
       <Card>
       <h4 className="flex-80" >{this.state.message}</h4>
-      <FloatingActionButton mini={true} className="flex-20">
+      {/*<FloatingActionButton mini={true} className="flex-20">
           <Close />
-     </FloatingActionButton>
+     </FloatingActionButton>*/}
       </Card>:null}
-      {messages.length == 0?null:
-        messages.map((message,index) => (
-          <Card key={index}>
-          <h4   style={{width:'90%'}} >{message}</h4>
-          <FloatingActionButton mini={true}
-                     onTouchTap={(event) => this.removeMessageFromDB(event, message)}>
-                      <Close />
-         </FloatingActionButton>
-          </Card>
-        ))
+
+      {len>1 ?
+        <div>
+    {messages.map(info=>(
+
+
+      <Card className="layout-row" style={{textAlign:"center"}}>
+        <h4 style={{width:'90%'}} className="flex-33" >{info.message}</h4>
+         <IconButton
+                 onTouchTap={(event) => this.removeMessageFromDB(event,info)} className="flex-33">
+                     <Close />
+        </IconButton>
+    </Card>
+
+    ))}
+
+        </div>:null
       }
       <Card>
       <TextField
             hintText="Type Your Message"
             floatingLabelText="Type Your Message"
-            onChange={this.handleMessageChange}
+            onBlur={this.handleMessageChange}
             fullWidth={true}
             style={{width:'90%'}}
              />
-    <FloatingActionButton  mini={true}   disabled={this.state.disable} onClick={this.handleMessagePost}>
+    <FloatingActionButton  mini={true}   disabled={this.state.disable}
+     onTouchTap={(event) => this.handleMessagePost()} >
       <Send />
     </FloatingActionButton>
     </Card>
